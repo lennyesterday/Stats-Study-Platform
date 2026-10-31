@@ -1,0 +1,35 @@
+import type { Flashcard } from '../types';
+
+const c = (id: string, topic: Flashcard['topic'], front: string, back: string): Flashcard => ({ id: `w1-${id}`, topic, front, back });
+
+export const flashcards: Flashcard[] = [
+  c('quant', 'variables', 'Quantitative vs. qualitative variable?', '**Quantitative**: numerical values (discrete counts or continuous measurements). **Qualitative**: categories (nominal or ordinal).'),
+  c('discrete', 'variables', 'Discrete vs. continuous variable — definition + dataset example of each.', 'Discrete: isolated countable values (number of siblings). Continuous: any value in an interval (StudyHoursPerWeek, SleepHoursPerNight).'),
+  c('nominal', 'variables', 'Nominal vs. ordinal — classify StudyMethod and StressLevel.', 'StudyMethod = **nominal** (no natural order). StressLevel = **ordinal** (Low < Medium < High).'),
+  c('mean-cat', 'variables', 'Can you compute a mean for StressLevel? What can you report instead?', 'No — it is categorical. Report the **mode** and frequencies/proportions.'),
+  c('codes', 'variables', 'StudyMethod is coded 1–4 in a file. Is it quantitative now?', 'No. Numeric codes are labels; the variable is still nominal.'),
+  c('rv', 'distributions', 'What is a random variable?', 'A function that assigns a number to each outcome of a random process, so uncertainty can be described with probabilities.'),
+  c('rv-cont', 'distributions', 'For a continuous X, what is P(X = 7)? How are probabilities found?', '$P(X = 7) = 0$. Probabilities are **areas under the density curve**, e.g. $P(a<X<b)$.'),
+  c('median', 'descriptives', 'Median of FinalGrade = 68.5. Correct interpretation?', '50 % of the final grades are **below** 68.5 (and 50 % above).'),
+  c('mean-vs-median', 'descriptives', 'Which centre measure is robust to outliers?', 'The **median**. The mean is pulled towards extreme values / the long tail.'),
+  c('var-formula', 'descriptives', 'Why does the sample variance divide by n − 1 instead of n?', 'The deviations are measured from x̄, which was computed from the same data, so they come out a bit too small: one degree of freedom is "used up" by x̄. Dividing by n − 1 corrects this, so s² is unbiased for σ².'),
+  c('var-pop', 'descriptives', 'When do you use the population variance (÷ N) and when the sample variance (÷ n − 1)?', '**Population**: your data are the whole group you care about. **Sample**: your data are used to estimate a larger population, which is the usual case in inference.'),
+  c('nonneg', 'descriptives', 'Can a variance or SD be negative?', 'No. Both are built from squared deviations → always ≥ 0. Zero only if all values are equal.'),
+  c('sd-units', 'descriptives', 'Units of variance vs. SD for SleepHoursPerNight?', 'Variance: hours². SD: hours (same unit as the data) → SD is easier to interpret.'),
+  c('iqr', 'descriptives', 'Why is the IQR a robust measure of spread, and how does it flag outliers?', 'It only uses the middle 50 % of the data (Q1 to Q3), so extreme values do not move it. Values far beyond the quartiles (more than 1.5 IQR) are flagged as outliers.'),
+  c('skew-right', 'descriptives', 'Right (positive) skew: where is the tail and how do mean and median compare?', 'Long tail to the **right**; typically **mean > median**.'),
+  c('skew-left', 'descriptives', 'FinalGrade: mean 67.2, median 68.5. Skew direction, and why?', 'Mean < median → **left (negative) skew**: a few low grades pull the mean down, the median does not react to them.'),
+  c('param-stat', 'sampling', 'Parameter vs. statistic + symbols for mean, SD, proportion.', 'Parameter (population, fixed, unknown): μ, σ, π. Statistic (sample, varies): x̄, s, p.'),
+  c('hyp-param', 'sampling', 'What is wrong with "H₀: x̄ = 15"?', 'Hypotheses are about **parameters**, never statistics: H₀: μ = 15.'),
+  c('z-shape', 'distributions', 'Standard Normal: shape, mean, SD, role of df.', 'Symmetric bell, mean 0, SD 1. No degrees of freedom — fixed universal shape.'),
+  c('t-shape', 'distributions', 't-Student vs. Z?', 'Also symmetric, mean 0, but **heavier tails** (SD > 1). Shape depends on df; as df → ∞, t → Z.'),
+  c('chi-shape', 'distributions', 'Chi-square distribution: shape and parameters.', 'Right-skewed, only positive values. One parameter: df. More symmetric as df increases.'),
+  c('f-shape', 'distributions', 'F-Snedecor distribution: shape and parameters.', 'Right-skewed, positive. Two df: numerator m and denominator n.'),
+  c('table-conv', 'tables', 'What does every number in the course tables represent?', 'A **left-tail cumulative probability**: $P[X < x]$ (Z table: probability inside; t, χ², F: score inside, probability in the column header).'),
+  c('t15', 'tables', 'You need t with 97.5 % of the probability ABOVE it. Which column, and which sign?', 'Above 0.975 means below 0.025. The table only has the upper columns, so use symmetry: read column **0.975** and take the **negative** value.'),
+  c('t-inf', 'tables', 'Why does the last row (∞) of the t table contain the z values?', 'With more df, s estimates σ better and the t distribution approaches the standard normal. At df = ∞ they are identical.'),
+  c('chi-sym', 'tables', 'Can you get P(χ²₁₀ < q) = 0.05 by taking minus the 0.95 value?', 'No — χ² is not symmetric. Read column 0.050: **3.940**.'),
+  c('f-dims', 'tables', 'F table: which df is the column and which is the block?', 'Columns: **m** (numerator df). Blocks: **n** (denominator df). Rows within a block: probability.'),
+  c('standardize', 'distributions', 'What does a z-score tell you, and why do we standardise?', 'How many standard deviations a value lies above or below the mean. Converting any normal variable to Z lets one table (the standard normal) answer questions about all of them.'),
+  c('decimals', 'tables', 'Why round only at the end of a calculation?', 'Rounding intermediate results adds up errors and can land you between two answer options. Keep full precision until the final answer.'),
+];

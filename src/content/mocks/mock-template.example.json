@@ -1,0 +1,16 @@
+{
+  "_comment": "Copy to mockNN.json (e.g. mock03.json) and fill in. Question types: numeric, cloze, single, truefalse, gaps. topic must be one of the TopicIds in src/content/types.ts.",
+  "id": 3,
+  "title": "Mock 3",
+  "official": true,
+  "generated": false,
+  "note": "Digitised from the official Moodle mock.",
+  "durationMin": 90,
+  "questions": [
+    { "id": "q1", "topic": "descriptives", "type": "numeric", "points": 1, "prompt": "Compute the sample mean of 12, 14, 13, 15 (2 decimals).", "answer": 13.5, "decimals": 2, "solution": ["(12 + 14 + 13 + 15)/4 = 13.50"] },
+    { "id": "q2", "topic": "testing", "type": "truefalse", "points": 1, "prompt": "Not rejecting H₀ proves H₀.", "answer": false, "solution": ["We only lack evidence against H₀."] },
+    { "id": "q3", "topic": "ci-mean", "type": "single", "points": 1, "prompt": "Reliability factor for a 95 % CI, σ known?", "options": ["1.645", "1.960", "2.576"], "answer": 1, "solution": ["z₀.₉₇₅ = 1.960"] },
+    { "id": "q4", "topic": "anova", "type": "gaps", "points": 1, "prompt": "F = 5.2 > 3.35, so we {0} H₀.", "gaps": [{ "options": ["reject", "do not reject"], "answer": 0 }], "solution": ["F above the critical value → reject."] },
+    { "id": "q5", "topic": "chisq", "type": "cloze", "points": 2, "prompt": "2 × 3 table … give χ² and df.", "inputs": [{ "id": "x", "label": "χ²", "answer": 7.12, "decimals": 2 }, { "id": "df", "label": "df", "answer": 2, "decimals": 0 }], "solution": ["…"] }
+  ]
+}

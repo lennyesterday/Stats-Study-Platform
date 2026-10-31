@@ -1,0 +1,882 @@
+[
+  {
+    "world": 1,
+    "theory": [
+      {
+        "id": "w1-variables",
+        "title": "Data & variables",
+        "topic": "variables",
+        "outcome": "Classify variables as quantitative (discrete / continuous) or qualitative (nominal / ordinal).",
+        "why": "Data does not analyze itself. The **type of variable** decides which summary, which graph, which distribution and — later — which test you are allowed to use. Every exam question silently starts with this classification.",
+        "definition": "- **Quantitative** variables represent numerical values. **Discrete**: isolated counts (number of siblings, number of courses). **Continuous**: measurements on a continuous scale (StudyHoursPerWeek, SleepHoursPerNight, FinalGrade).\n- **Qualitative** (categorical) variables describe categories. **Nominal**: no natural order (StudyMethod, Gender, PartTimeJob). **Ordinal**: meaningful ranking (StressLevel: Low < Medium < High).",
+        "example": "In the 60-student dataset: *Age* is quantitative (in years — recorded as whole numbers, but age is conceptually continuous), *StudyHoursPerWeek* and *SleepHoursPerNight* are continuous, *StudyMethod* (Solo, Group, Tutoring, OnlineResources) is nominal, *StressLevel* is ordinal, *PassFail* is nominal (binary).",
+        "mistakes": [
+          "Calling a variable \"quantitative\" because it is coded with numbers (e.g. 1 = Solo, 2 = Group). Codes are labels, not quantities.",
+          "Computing a mean of a categorical variable. For StressLevel or StudyMethod you can only report the **mode** (and frequencies).",
+          "Treating \"number of siblings\" as continuous — it can only take integer values, so it is discrete."
+        ],
+        "examTip": "Quiz 2 asked exactly this as True/False: \"StressLevel is ordinal, StudyMethod is nominal\" (True) and \"we cannot compute a mean for categorical variables, but their mode can be identified\" (True).",
+        "think": [
+          {
+            "q": "FinalGrade is used to create PassFail (pass mark 50). What happens to the information when you go from FinalGrade to PassFail?",
+            "a": "You turn a continuous variable into a binary nominal one — information is lost (a 51 and a 94 become the same \"Pass\"). Methods for proportions (π) replace methods for means (μ)."
+          },
+          {
+            "q": "Why does the variable type matter for choosing ANOVA vs. a chi-square test later?",
+            "a": "ANOVA needs a metric (quantitative) dependent variable and a categorical factor; the chi-square test of independence needs two categorical variables. Classifying correctly is step 1 of the \"Analytical Pipeline\"."
+          }
+        ]
+      },
+      {
+        "id": "w1-random",
+        "title": "Random variables",
+        "topic": "distributions",
+        "outcome": "Define a random variable and distinguish discrete from continuous random variables.",
+        "why": "A random variable lets us **describe uncertainty mathematically**: it turns the outcome of a random process (draw a student at random) into a number, so that we can attach probabilities to it.",
+        "definition": "A **random variable** $X$ assigns a number to each outcome of a random process.\n- **Discrete**: takes isolated values, each with a specific probability $P(X = x)$.\n- **Continuous**: defined by a **probability density function** $f(x)$; probabilities are **areas under the curve**.",
+        "formulas": [
+          "P(a < X < b) = \\int_a^b f(x)\\,dx",
+          "P(X = x) = 0 \\quad \\text{for a continuous } X"
+        ],
+        "example": "Pick a Nova SBE student at random from the 60. $X$ = SleepHoursPerNight is a continuous random variable: $P(6.5 < X < 7.5)$ is the area under the density between 6.5 and 7.5.",
+        "mistakes": [
+          "Asking for $P(X = 7)$ for a continuous variable and expecting a positive number — it is 0.",
+          "Worrying about \"<\" vs \"≤\" for continuous variables: $P(X < x) = P(X \\le x)$."
+        ],
+        "examTip": "All four course tables give a **cumulative (left-tail) probability** $P[X < x]$ — the area to the left of $x$."
+      },
+      {
+        "id": "w1-descriptives",
+        "title": "Descriptive statistics: centre and spread",
+        "topic": "descriptives",
+        "outcome": "Compute and interpret mean, median, mode, variance and standard deviation.",
+        "why": "Before any inference we summarise: **where** is the centre of the data and **how much** do values vary around it? Spread is what later drives standard errors, margins of error and test statistics.",
+        "definition": "- **Mean**: the balance point (sensitive to extreme values).\n- **Median**: the middle value of the ordered data — 50 % of the values lie below it.\n- **Mode**: most frequent value/category (the only centre for nominal data).\n- **Variance**: average squared deviation from the mean. **Standard deviation**: its square root, in the original units. Both are **non-negative**.",
+        "formulas": [
+          "\\bar x = \\frac{1}{n}\\sum_{i=1}^n x_i",
+          "\\sigma^2 = \\frac{1}{N}\\sum_{i=1}^N (x_i-\\mu)^2 \\quad \\text{(population, Excel VAR.P)}",
+          "s^2 = \\frac{1}{n-1}\\sum_{i=1}^n (x_i-\\bar x)^2 \\quad \\text{(sample, Excel VAR.S)}",
+          "\\sigma = \\sqrt{\\sigma^2}, \\qquad s = \\sqrt{s^2}"
+        ],
+        "example": "Dataset (60 students): mean Age = **20.1**, median Age = **20**; median FinalGrade = **68.5**, i.e. *50 % of the final grades are below 68.5*. Treating the 60 students as the population: variance of StudyHoursPerWeek = **10.9** (VAR.P), SD of SleepHoursPerNight = **0.85** (STDEV.P). With the sample formulas you would get 11.1 and 0.86.",
+        "mistakes": [
+          "Mixing population (÷N) and sample (÷(n−1)) formulas. In Quiz 2 the 60 students were treated as the **population** (answers 10.9 and 0.85 match VAR.P / STDEV.P).",
+          "Reporting the median as \"50 % of grades ARE 68.5\" — correct: 50 % are **below** 68.5.",
+          "Forgetting to square-root: SD and variance are in different units (hours vs hours²).",
+          "Ignoring the requested number of decimals. Moodle marked 10.89 wrong when \"1 decimal digit\" was asked (correct: 10.9)."
+        ],
+        "examTip": "Read the rounding instruction twice. \"use 1 decimal digit\" → 10.9, not 10.89. \"no decimals\" → 20.",
+        "think": [
+          {
+            "q": "Why can variance and standard deviation never be negative?",
+            "a": "They are built from squared deviations (≥ 0) divided by a positive number; the SD is the non-negative square root. A variance of 0 means all values are identical."
+          },
+          {
+            "q": "Why do we divide by n − 1 for a sample?",
+            "a": "Deviations are measured from x̄, which is itself estimated from the same data, so they are slightly too small. Dividing by n − 1 (the degrees of freedom) corrects this and makes s² an unbiased estimator of σ²."
+          }
+        ]
+      },
+      {
+        "id": "w1-shape",
+        "title": "Other measures & skewness",
+        "topic": "descriptives",
+        "outcome": "Use quartiles, range and IQR; read skewness from the relation between mean and median.",
+        "why": "Two variables can share the same mean and SD and still look completely different. **Shape** (symmetry, tails, outliers) tells you whether the mean is a good summary and whether normal-based methods are reasonable.",
+        "definition": "- **Range** = max − min. **Quartiles** Q1, Q3 split the ordered data into quarters; **IQR** = Q3 − Q1 (the middle 50 %).\n- **Skewness**: *right (positive) skew* → long tail to the right, typically **mean > median**; *left (negative) skew* → long tail to the left, **mean < median**; symmetric → mean ≈ median.\n- **Outlier rule** (boxplot): below Q1 − 1.5·IQR or above Q3 + 1.5·IQR.",
+        "formulas": [
+          "\\text{IQR} = Q_3 - Q_1",
+          "\\text{outlier if } x < Q_1 - 1.5\\,\\text{IQR} \\ \\text{ or } \\ x > Q_3 + 1.5\\,\\text{IQR}"
+        ],
+        "example": "FinalGrade: mean 67.2 < median 68.5 and Excel SKEW = −0.26 → slight **left** skew. AttendancePercent: SKEW = −0.73 (a few students with low attendance pull the tail to the left). Q1 and Q3 of FinalGrade: 57.75 and 78.25, IQR = 20.5.",
+        "mistakes": [
+          "Naming the skew after the hump instead of the tail. The **tail** gives the direction.",
+          "Thinking skewness changes the median a lot — the median is robust; the **mean** moves toward the tail."
+        ],
+        "examTip": "If an exam asks \"which is the better measure of centre for a strongly skewed variable?\", answer the **median** (robust to the tail)."
+      },
+      {
+        "id": "w1-popsample",
+        "title": "Population vs. sample",
+        "topic": "sampling",
+        "outcome": "Distinguish population parameters from sample statistics and use the right notation.",
+        "why": "Inference = using a **sample statistic** (which we can compute) to learn about a **population parameter** (which we cannot see). Notation tells the reader which one you mean — examiners check it.",
+        "definition": "Population **parameter** vs. sample **statistic**:\n- Mean: $\\mu$ vs. $\\bar x$\n- Standard deviation: $\\sigma$ vs. $s$\n- Variance: $\\sigma^2$ vs. $s^2$\n- Proportion: $\\pi$ vs. $p$\n- Size: $N$ vs. $n$\n\nA **parameter** is fixed but unknown; a **statistic** varies from sample to sample (sampling variability).",
+        "example": "The 60 Nova SBE students can be seen as a **sample** of all Nova master students (then $\\bar x = 67.2$ estimates $\\mu$) or as the **population** of interest (then 67.2 *is* $\\mu$). The research question decides.",
+        "mistakes": [
+          "Writing hypotheses about $\\bar x$ (e.g. $H_0: \\bar x = 15$). Hypotheses are **always** about parameters: $H_0: \\mu = 15$.",
+          "Using $p$ for the population proportion — the course uses $\\pi$ for the population and $p$ for the sample."
+        ],
+        "examTip": "Every hypothesis and every CI statement must mention a **parameter** ($\\mu$ or $\\pi$, …)."
+      },
+      {
+        "id": "w1-distributions",
+        "title": "Distributions: Normal, t-Student, χ², F",
+        "topic": "distributions",
+        "outcome": "Describe the shape, centre and spread of the Standard Normal, t-Student, Chi-square and F-Snedecor distributions.",
+        "why": "Each test statistic in this course follows one of four distributions. Knowing their shapes tells you **where the rejection region is** and **whether the symmetry trick works**.",
+        "definition": "- **Standard Normal Z**: symmetric bell, mean 0, SD 1. Fixed universal shape.\n- **t-Student**: symmetric bell with **heavier tails**, mean 0, SD > 1. Shape depends on the **degrees of freedom**; as df → ∞ it becomes Z.\n- **Chi-square χ²**: not symmetric, **skewed to the right**, only positive values; shape depends on df, more symmetric as df grows.\n- **F-Snedecor**: right-skewed, positive; depends on **two** df (numerator $m$, denominator $n$).",
+        "formulas": [
+          "Z = \\frac{X-\\mu}{\\sigma} \\sim N(0,1)",
+          "t_{df} \\xrightarrow{df\\to\\infty} Z"
+        ],
+        "example": "Compare the last row of the t table (df = ∞) with the Z table: $t_{0.975,\\infty} = 1.960 = z_{0.975}$ and $t_{0.95,\\infty} = 1.645 = z_{0.95}$.",
+        "mistakes": [
+          "Using symmetry ($-$value) for χ² or F. They are not symmetric — lower-tail values must be read from their own columns.",
+          "Forgetting that t has heavier tails: for small samples the t critical value is **larger** than z."
+        ],
+        "examTip": "Course summary table: Z — symmetric, mean 0, SD 1, df no impact; t — symmetric heavy tails, mean 0, SD > 1, df determines tail thickness; χ² — right-skewed, df drives shape toward symmetry; F — right-skewed, driven by two df.",
+        "think": [
+          {
+            "q": "Why does the t distribution need degrees of freedom while Z does not?",
+            "a": "t accounts for the extra uncertainty from estimating σ with s. With few observations s is unreliable → heavier tails. The more df, the better s estimates σ and the closer t gets to Z."
+          }
+        ]
+      },
+      {
+        "id": "w1-tables",
+        "title": "Reading the statistical tables",
+        "topic": "tables",
+        "outcome": "Use the Z, t, χ² and F tables to go from score to probability and from probability to score.",
+        "why": "The exam is open-book and AI can compute anything — but the course expects you to **read the tables manually** and understand what you read. Every critical value and many p-values come from here.",
+        "definition": "All four course tables are **left-tail cumulative**: the number in the table is $p = P[X < x]$.\n- **Z table**: row = first decimal of z, column = second decimal; cell = $P[Z < z]$. Only positive z — use symmetry $P(Z < -z) = 1 - P(Z < z)$.\n- **t table**: row = df, column = probability $P[t_{df} < t]$ (0.999 … 0.500); cell = t score.\n- **χ² table**: row = df, column = $P[\\chi^2_{df} < q]$ (0.005 … 0.995); cell = q.\n- **F table**: blocks by $n$ (denominator df), rows inside a block = probability (0.900 … 0.995), columns = $m$ (numerator df); cell = f.",
+        "formulas": [
+          "P(Z > z) = 1 - P(Z < z)",
+          "P(a < Z < b) = P(Z < b) - P(Z < a)",
+          "P(T > t) = p \\iff P(T < t) = 1 - p"
+        ],
+        "example": "- $P(Z < z) = 0.95$ → 0.95 lies between 0.9495 (1.64) and 0.9505 (1.65) → **z = 1.645**.\n- $P(Z > z) = 0.90$ ⇔ $P(Z < z) = 0.10$ → **z = −1.28**.\n- $t$ with df = 5 and $P(T < t) = 0.90$ → row 5, column 0.900 → **t = 1.476**.\n- $P(T_{15} > t) = 0.975$ ⇔ $P(T_{15} < t) = 0.025$ → by symmetry **t = −2.131** (Moodle \"2 decimal digits\": **−2.13**).",
+        "mistakes": [
+          "\"Above\" vs \"below\": $P(T > t) = 0.975$ is a value **below** zero. Draw the curve and shade the area first.",
+          "Looking up α instead of $1 - \\alpha$ (or $1 - \\alpha/2$). For a right-tail critical value at α = 0.05 use column **0.950**.",
+          "Swapping F degrees of freedom: $m$ = numerator (columns), $n$ = denominator (blocks).",
+          "Applying symmetry to χ² / F."
+        ],
+        "examTip": "Moodle grades the number of decimals strictly: **−2.131** was marked wrong when 2 decimals were requested (−2.13). Quiz 2 also said: use the tables first and *only after* confirm with AI.",
+        "think": [
+          {
+            "q": "df = 39 is not a row in the t table. What do you do?",
+            "a": "Use the closest available row (df = 40) or, to be conservative, the smaller one (df = 30). The difference is small (2.021 vs 2.042). In the exam you can confirm with Excel T.INV(0.975; 39) = 2.023."
+          },
+          {
+            "q": "Why does the χ² table have columns both near 0 (0.005) and near 1 (0.995)?",
+            "a": "Because χ² is not symmetric — a lower-tail value cannot be obtained from an upper-tail value by changing the sign. Both tails need their own columns."
+          }
+        ],
+        "links": [
+          {
+            "label": "Open the Table Trainer",
+            "to": "/tables"
+          }
+        ]
+      },
+      {
+        "id": "w1-standardize",
+        "title": "Standardising a normal variable",
+        "topic": "distributions",
+        "outcome": "Convert X ~ N(μ, σ) into Z and compute probabilities with the Z table.",
+        "why": "There is only one Z table, but infinitely many normal distributions. Standardising maps any normal variable onto Z so the same table answers every question.",
+        "definition": "If $X \\sim N(\\mu, \\sigma)$ then $Z = (X-\\mu)/\\sigma \\sim N(0,1)$. The z score says **how many standard deviations** $x$ lies above (+) or below (−) the mean.",
+        "formulas": [
+          "z = \\frac{x-\\mu}{\\sigma}",
+          "P(X < x) = P\\left(Z < \\frac{x-\\mu}{\\sigma}\\right)",
+          "x = \\mu + z\\,\\sigma"
+        ],
+        "example": "Suppose SleepHoursPerNight ~ N(6.8, 0.85). $P(X < 6) = P(Z < (6-6.8)/0.85) = P(Z < -0.94) = 1 - 0.8264 = 0.1736$.",
+        "mistakes": [
+          "Dividing by the variance instead of the standard deviation.",
+          "Rounding z to 1 decimal — the Z table works with 2 decimals."
+        ],
+        "examTip": "Round z to **2 decimals** before reading the Z table; report probabilities with 4 decimals unless told otherwise."
+      }
+    ]
+  },
+  {
+    "world": 2,
+    "theory": [
+      {
+        "id": "w2-sampling",
+        "title": "Sampling and representativeness",
+        "topic": "sampling",
+        "outcome": "Explain random sampling, representativeness and sampling variability.",
+        "why": "We almost never observe the whole population (all Nova students). A sample is only useful if it **represents** the population — otherwise no formula can rescue the conclusion.",
+        "definition": "- **Simple random sample**: every member of the population has the same chance of being selected, independently.\n- **Representative sample**: its composition mirrors the population on relevant characteristics.\n- **Sampling variability**: different samples give different statistics ($\\bar x$, $p$, $s$) — purely by chance.\n- **Bias** (systematic error) does not shrink with larger n; **random error** does.",
+        "example": "Surveying only students in the library on a Sunday evening would over-represent heavy studiers: StudyHoursPerWeek would be **biased upwards**, however many students you ask.",
+        "mistakes": [
+          "Thinking a large sample fixes a biased sampling method.",
+          "Confusing sampling variability (natural, quantifiable) with bias (systematic, not fixed by n)."
+        ],
+        "examTip": "If a question asks why two samples give different means, the keyword is **sampling variability**.",
+        "think": [
+          {
+            "q": "Two classmates each take a random sample of 30 students and get x̄ = 9.1 and x̄ = 9.6 study hours. Did one of them make a mistake?",
+            "a": "No. Different random samples give different means — sampling variability. The sampling distribution of x̄ describes how large these differences typically are (its SD is the standard error)."
+          }
+        ]
+      },
+      {
+        "id": "w2-sampling-dist",
+        "title": "Sampling distribution of x̄ and the standard error",
+        "topic": "sampling",
+        "outcome": "Describe the sampling distribution of the sample mean and compute the standard error.",
+        "why": "To know how far $\\bar x$ can be from $\\mu$, we need the distribution of $\\bar x$ over all possible samples. Its spread — the **standard error** — is the building block of every CI and test.",
+        "definition": "If we repeatedly draw samples of size n and compute $\\bar x$ each time, the values of $\\bar x$ form the **sampling distribution of the mean**:\n- centre: $E(\\bar X) = \\mu$ (x̄ is unbiased)\n- spread: $SE = \\sigma/\\sqrt n$ (estimated by $s/\\sqrt n$)\n- larger n → smaller SE → $\\bar x$ closer to $\\mu$. To **halve** the SE you need **4×** the sample size.",
+        "formulas": [
+          "E(\\bar X) = \\mu",
+          "SE(\\bar X) = \\frac{\\sigma}{\\sqrt{n}} \\approx \\frac{s}{\\sqrt{n}}"
+        ],
+        "example": "StudyHoursPerWeek: σ ≈ 3.3. With n = 36: SE = 3.3/6 = 0.55 hours. With n = 144: SE = 3.3/12 = 0.275 hours (half).",
+        "mistakes": [
+          "Using σ instead of σ/√n when the question is about the **mean** of a sample.",
+          "Confusing SD (spread of individual students) with SE (spread of sample means)."
+        ],
+        "examTip": "Excel \"Descriptive Statistics\" prints **Standard Error** = s/√n — that is the SE of the mean, not the SD."
+      },
+      {
+        "id": "w2-clt",
+        "title": "The Central Limit Theorem (must-know!)",
+        "topic": "sampling",
+        "outcome": "State the CLT and use it to compute probabilities about x̄.",
+        "why": "The lecturer marks the CLT as **mandatory**: it is the reason we can use the normal (and t) distribution for means even when the data themselves are not normal.",
+        "definition": "For a random sample of size n from **any** population with mean μ and SD σ, the sampling distribution of $\\bar X$ is **approximately normal** when n is large enough (rule of thumb **n ≥ 30**): $\\bar X \\approx N(\\mu, \\sigma/\\sqrt n)$.\n- If the population is itself normal, $\\bar X$ is exactly normal for any n.\n- The more skewed the population, the larger n must be.",
+        "formulas": [
+          "\\bar X \\;\\dot\\sim\\; N\\!\\left(\\mu, \\frac{\\sigma}{\\sqrt n}\\right) \\quad (n \\ge 30)",
+          "Z = \\frac{\\bar X - \\mu}{\\sigma/\\sqrt n}"
+        ],
+        "example": "AttendancePercent is left-skewed (SKEW −0.73). Still, the mean attendance of random groups of 40 students is approximately normal with mean μ and SE = σ/√40.\n\nP(x̄ > 10) for StudyHours with μ = 9.3, σ = 3.3, n = 36: $z = (10-9.3)/0.55 = 1.27$ → $1 - 0.8980 = 0.1020$.",
+        "mistakes": [
+          "Saying the CLT makes the **data** normal. It is about the distribution of the **sample mean**.",
+          "Applying the CLT with n = 8 from a strongly skewed population.",
+          "Forgetting √n in the denominator."
+        ],
+        "examTip": "Typical exam sentence: *\"By the CLT, since n ≥ 30, the sampling distribution of x̄ is approximately normal with mean μ and standard error σ/√n.\"*",
+        "think": [
+          {
+            "q": "Why does averaging make a skewed distribution look normal?",
+            "a": "Extreme values in one direction tend to be balanced by ordinary values when you average many independent observations. Sums of many independent pieces pile up around the middle — the bell shape."
+          },
+          {
+            "q": "What happens to the sampling distribution of x̄ as n → ∞?",
+            "a": "It concentrates around μ (SE → 0) and becomes ever closer to normal."
+          }
+        ],
+        "links": [
+          {
+            "label": "Try the CLT simulator",
+            "to": "/lab/clt"
+          }
+        ]
+      },
+      {
+        "id": "w2-estimation",
+        "title": "Point estimation and good estimators",
+        "topic": "ci-mean",
+        "outcome": "Name point estimators for μ, σ and π and the properties of good estimators.",
+        "why": "Before building intervals we need a single best guess. Not every formula is a good guess — estimators are judged by objective properties.",
+        "definition": "- **Point estimate**: a single number from the sample used to estimate a parameter: $\\bar x \\to \\mu$, $s \\to \\sigma$, $p \\to \\pi$.\n- **Unbiased**: the sampling distribution is centred on the parameter ($E(\\bar X)=\\mu$; $s^2$ with n−1 is unbiased for $\\sigma^2$).\n- **Efficient**: smallest variance among unbiased estimators.\n- **Consistent**: gets closer to the parameter as n grows.",
+        "example": "49 of 60 students passed: point estimate of the pass rate $p = 49/60 = 0.817$. It says nothing about its own precision — that is why we need a CI.",
+        "mistakes": [
+          "Reporting only a point estimate when the question asks about precision/uncertainty."
+        ],
+        "examTip": "A point estimate is **never** exactly equal to the parameter; the CI quantifies how far off it may be."
+      },
+      {
+        "id": "w2-ci-mean",
+        "title": "Confidence interval for μ",
+        "topic": "ci-mean",
+        "outcome": "Construct a CI for the mean with Z (σ known) or t (σ unknown) and identify the reliability factor and margin of error.",
+        "why": "A CI turns a point estimate into a statement about precision: a range of plausible values for μ, with a stated confidence level.",
+        "definition": "**Point estimate ± margin of error**, where margin of error = **reliability factor × standard error**.\n- σ known (or n large, course convention): reliability factor $z_{1-\\alpha/2}$.\n- σ unknown: $t_{1-\\alpha/2,\\,n-1}$ with **df = n − 1**.\n- Confidence level $1-\\alpha$: 90 % → 1.645; 95 % → 1.96; 99 % → 2.576 (Z).",
+        "formulas": [
+          "\\bar x \\pm z_{1-\\alpha/2}\\,\\frac{\\sigma}{\\sqrt n}",
+          "\\bar x \\pm t_{1-\\alpha/2,\\;n-1}\\,\\frac{s}{\\sqrt n}",
+          "ME = \\text{reliability factor} \\times SE"
+        ],
+        "example": "GPA example: n = 16, x̄ = 15.0, s = 1.2 → df = 15, $t_{0.975,15} = 2.131$, SE = 0.3, ME = 0.639 → **[14.36; 15.64]**.",
+        "mistakes": [
+          "Using z when σ is unknown and n is small.",
+          "Using column 0.95 for a 95 % two-sided CI — the correct column is **0.975** (α/2 in each tail).",
+          "Wrong df (n instead of n − 1)."
+        ],
+        "examTip": "Write the reliability factor with its table location: \"$t_{0.975;15} = 2.131$ (t table, row 15, column 0.975)\".",
+        "think": [
+          {
+            "q": "Why does the t reliability factor shrink towards 1.96 as n grows?",
+            "a": "With more data, s becomes a reliable estimate of σ, so the extra uncertainty disappears and the t distribution converges to Z (last row of the t table = Z values)."
+          }
+        ]
+      },
+      {
+        "id": "w2-ci-drivers",
+        "title": "Margin of error: n, variability, confidence level",
+        "topic": "ci-mean",
+        "outcome": "Explain how sample size, variability and confidence level affect the width of a CI; compute the required n.",
+        "why": "In practice you design the study: how many students must you survey for a given precision? And the exam loves \"what happens to the interval if…\" questions.",
+        "definition": "- **n ↑** → SE ↓ → narrower CI (width ∝ 1/√n).\n- **Variability σ ↑** → wider CI.\n- **Confidence level ↑** (95 % → 99 %) → larger reliability factor → wider CI. More confidence costs precision.\n- **Precision**: 15.0 ± 0.2 is much more precise than 15.0 ± 1.5 (same centre, smaller ME).",
+        "formulas": [
+          "n = \\left(\\frac{z_{1-\\alpha/2}\\,\\sigma}{E}\\right)^2 \\quad (\\text{round up})"
+        ],
+        "example": "To estimate mean sleep (σ = 0.85) within ±0.2 h at 95 %: $n = (1.96 \\cdot 0.85/0.2)^2 = 69.4$ → **70 students**.",
+        "mistakes": [
+          "Rounding the required n down — always round **up**.",
+          "Thinking a 99 % CI is \"more precise\" than a 95 % CI — it is wider, so less precise."
+        ],
+        "examTip": "Width = 2 × ME. If you are given an interval [a; b]: centre = (a+b)/2, ME = (b−a)/2."
+      },
+      {
+        "id": "w2-ci-prop",
+        "title": "Confidence interval for a proportion π",
+        "topic": "ci-prop",
+        "outcome": "Construct and interpret a CI for a population proportion.",
+        "why": "Many questions are about shares: pass rate, share of students with a part-time job. The logic is identical to μ — only the SE changes.",
+        "definition": "With sample proportion $p = x/n$ and a large sample ($np \\ge 5$ and $n(1-p) \\ge 5$), the reliability factor is **always z**.",
+        "formulas": [
+          "p \\pm z_{1-\\alpha/2}\\sqrt{\\frac{p(1-p)}{n}}"
+        ],
+        "example": "Pass rate: p = 49/60 = 0.8167. SE = √(0.8167·0.1833/60) = 0.0500. 95 % CI: 0.8167 ± 1.96·0.0500 = **[0.719; 0.915]**.",
+        "mistakes": [
+          "Using t for proportions.",
+          "Using percentages (81.67) inside the square root instead of proportions (0.8167)."
+        ],
+        "examTip": "State the condition np ≥ 5 and n(1−p) ≥ 5 in one line — examiners reward it."
+      },
+      {
+        "id": "w2-ci-interpret",
+        "title": "Interpreting a confidence interval correctly",
+        "topic": "ci-mean",
+        "outcome": "Interpret a 95 % CI correctly and recognise common misinterpretations.",
+        "why": "Interpretation is where most exam points are lost — the computation is the easy part.",
+        "definition": "**Correct**: \"We are 95 % confident that the interval [14.36; 15.64] contains the **population mean** GPA μ.\" Meaning: if we repeated the sampling many times, about 95 % of the intervals built this way would contain μ.\n\n**Wrong**:\n- \"There is a 95 % probability that μ lies in [14.36; 15.64]\" (μ is fixed; this interval either contains it or not).\n- \"95 % of students have a GPA between 14.36 and 15.64\" (CI is about the mean, not individuals).\n- \"95 % of sample means fall in this interval.\"",
+        "example": "The CI simulator draws 100 intervals: roughly 95 of them cover μ, about 5 miss it — and you never know which ones.",
+        "mistakes": [
+          "Talking about x̄ in the interpretation (x̄ is always in the centre of its own CI).",
+          "Forgetting the context (units, population)."
+        ],
+        "examTip": "Template: *\"We are (1−α)·100 % confident that the population mean [variable, units] of [population] lies between a and b.\"*",
+        "think": [
+          {
+            "q": "Does a 95 % CI that contains μ₀ = 15 prove that μ = 15?",
+            "a": "No. It only says 15 is a plausible value — many other values in the interval are equally plausible. (This is the CI ↔ test link of World 3: \"fail to reject\" ≠ \"accept\".)"
+          }
+        ],
+        "links": [
+          {
+            "label": "Open the CI simulator",
+            "to": "/lab/ci"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "world": 3,
+    "theory": [
+      {
+        "id": "w3-hypotheses",
+        "title": "Null and alternative hypotheses",
+        "topic": "testing",
+        "outcome": "Formulate H₀ and H₁ about μ or π and choose a left-, right- or two-tailed test.",
+        "why": "A test can only answer the question you asked. Wrong hypotheses = wrong tail = wrong conclusion, even with perfect arithmetic. This is where the exam checks your logic.",
+        "definition": "- **H₀** (null): the status quo / the claim being tested, always contains **equality** ($=$, $\\le$, $\\ge$).\n- **H₁** (alternative): what we want to find evidence for; determines the tail.\n- **Two-tailed**: $H_1: \\mu \\ne \\mu_0$ (\"differs from\"). **Right-tailed**: $H_1: \\mu > \\mu_0$ (\"more than\"). **Left-tailed**: $H_1: \\mu < \\mu_0$ (\"less than\").",
+        "formulas": [
+          "H_0: \\mu = \\mu_0 \\quad\\text{vs}\\quad H_1: \\mu \\ne \\mu_0 \\;|\\; \\mu > \\mu_0 \\;|\\; \\mu < \\mu_0"
+        ],
+        "example": "- Claim \"students study **5 hours per day** on average\": $H_0: \\mu = 5$ vs $H_1: \\mu \\ne 5$.\n- \"The mean GPA is **higher than 15**\": $H_0: \\mu \\le 15$ vs $H_1: \\mu > 15$ (right-tailed).\n- \"Students sleep **less than 7 hours**\": $H_0: \\mu \\ge 7$ vs $H_1: \\mu < 7$ (left-tailed).",
+        "mistakes": [
+          "Writing hypotheses with x̄ instead of μ.",
+          "Putting the equality in H₁.",
+          "Choosing the tail after looking at the data."
+        ],
+        "examTip": "Translate the words: \"differs / changed\" → ≠; \"exceeds / more / increased\" → >; \"less / decreased / below\" → <.",
+        "think": [
+          {
+            "q": "Why does the equality always sit in H₀?",
+            "a": "The test statistic is computed assuming H₀ is true, so H₀ must specify one concrete value (μ₀) to centre the sampling distribution on."
+          }
+        ]
+      },
+      {
+        "id": "w3-procedure",
+        "title": "The testing procedure step by step",
+        "topic": "testing",
+        "outcome": "Carry out a complete test: hypotheses → α → test statistic → critical value / p-value → decision → conclusion.",
+        "why": "Exam answers are graded step by step. A fixed routine makes sure you never skip the step that carries the points (often the conclusion sentence).",
+        "definition": "1. State $H_0$ and $H_1$.\n2. Choose the significance level **α** (usually 0.05).\n3. Compute the **test statistic** (z or t) from the sample.\n4. Find the **critical value** from the table → rejection region (or compute the **p-value**).\n5. **Decision rule**: reject $H_0$ if the statistic falls in the rejection region (⇔ p-value < α).\n6. **Conclusion** in context, in plain English.",
+        "formulas": [
+          "z = \\frac{\\bar x - \\mu_0}{\\sigma/\\sqrt n}",
+          "t = \\frac{\\bar x - \\mu_0}{s/\\sqrt n}, \\quad df = n-1"
+        ],
+        "example": "Course example: n = 40, x̄ = 15.8, μ₀ = 15, s = 2.4, α = 0.05, two-tailed: $t = 0.8/(2.4/\\sqrt{40}) = 2.11$; critical value $t_{0.975;39} \\approx 2.021$ (row 40) → 2.11 > 2.021 → reject H₀: the mean GPA differs significantly from 15.",
+        "mistakes": [
+          "Stopping at \"reject H₀\" without a conclusion in context.",
+          "Comparing the test statistic with α (compare statistic with critical value, or p-value with α)."
+        ],
+        "examTip": "Always end with: *\"At the 5 % significance level, there is (not) sufficient evidence to conclude that …\"*"
+      },
+      {
+        "id": "w3-critical",
+        "title": "Critical values and rejection regions",
+        "topic": "testing",
+        "outcome": "Read the correct critical value (z or t) for each type of test and write the decision rule.",
+        "why": "The rejection region turns α into a concrete cut-off. Reading the right table column is a classic exam trap — especially with the left-tail course tables.",
+        "definition": "With the course (left-tail) tables:\n- **Right-tailed**: reject if stat > critical value at column **1 − α** (α = 0.05 → 0.950: z = 1.645).\n- **Left-tailed**: reject if stat < −(value at column 1 − α) (z = −1.645).\n- **Two-tailed**: reject if |stat| > value at column **1 − α/2** (α = 0.05 → 0.975: z = 1.96).\n- **z or t?** σ known → z; σ unknown → t with df = n − 1 (large n: t ≈ z).",
+        "example": "α = 0.05, n = 16, σ unknown, left-tailed → $t_{0.95;15} = 1.753$ → reject if t < −1.753.",
+        "mistakes": [
+          "Using 1.96 for a one-tailed test at 5 % (correct: 1.645).",
+          "Forgetting the minus sign for left-tailed tests."
+        ],
+        "examTip": "Write the decision rule *before* computing the statistic: \"Reject H₀ if t < −1.753.\"",
+        "links": [
+          {
+            "label": "See rejection regions in the Lab",
+            "to": "/lab/test"
+          }
+        ]
+      },
+      {
+        "id": "w3-pvalue",
+        "title": "The p-value and its misconceptions",
+        "topic": "errors",
+        "outcome": "Compute or bracket a p-value with the tables and interpret it correctly.",
+        "why": "Software reports p-values, not critical values. You must be able to read them — and to bracket them with the t table when no software is allowed.",
+        "definition": "**p-value** = probability, **assuming H₀ is true**, of a test statistic at least as extreme as the one observed.\n- Right-tailed: $P(Z > z_{obs})$; left: $P(Z < z_{obs})$; two-tailed: $2\\,P(Z > |z_{obs}|)$.\n- Reject H₀ if **p-value < α**. Same decision as the critical-value method — always.\n- With the t table you can only **bracket** p: e.g. t = 2.35, df = 10 lies between 2.228 (0.975) and 2.764 (0.990) → one tail 0.01–0.025 → two-tailed **0.02 < p < 0.05**.",
+        "formulas": [
+          "p = 2\\,[1 - \\Phi(|z|)] \\quad (\\text{two-tailed})"
+        ],
+        "example": "Sleep test: z = −2.10 (left-tailed) → p = P(Z < −2.10) = 1 − 0.9821 = **0.0179** < 0.05 → reject H₀.",
+        "mistakes": [
+          "\"p is the probability that H₀ is true.\" — No, p is computed *assuming* H₀ is true.",
+          "\"p > α proves H₀.\" — No, it only means insufficient evidence against H₀.",
+          "Forgetting to double the one-tail area for two-tailed tests."
+        ],
+        "examTip": "Small p = data are surprising if H₀ were true → evidence against H₀.",
+        "think": [
+          {
+            "q": "A study reports p = 0.03. A friend says \"so there is a 3 % chance the null hypothesis is true\". Correct them.",
+            "a": "The p-value is P(data at least this extreme | H₀ true), not P(H₀ true | data). It measures how surprising the data are under H₀, not the probability of H₀."
+          }
+        ]
+      },
+      {
+        "id": "w3-errors",
+        "title": "Type I and Type II errors, power",
+        "topic": "errors",
+        "outcome": "Define Type I and Type II errors, power, and explain the influence of α and n.",
+        "why": "Every decision can be wrong. Knowing which error you risk — and how to control it — is core statistical literacy and a favourite conceptual exam question.",
+        "definition": "- **Type I error**: reject H₀ when H₀ is true. P(Type I) = **α**.\n- **Type II error**: do not reject H₀ when H₀ is false. P(Type II) = **β**.\n- **Power** = 1 − β = P(reject H₀ | H₀ false).\n- α ↓ → β ↑ (for fixed n). **n ↑** → SE ↓ → power ↑ (both errors can be reduced). Larger true effect → more power.",
+        "formulas": [
+          "\\text{Power} = 1 - \\beta"
+        ],
+        "example": "H₀: μ = 15 vs H₁: μ > 15, σ = 2, n = 25, α = 0.05. If truly μ = 16: reject when x̄ > 15 + 1.645·0.4 = 15.658; power = P(x̄ > 15.658 | μ = 16) = P(Z > −0.86) = 0.8051; β = 0.1949.",
+        "mistakes": [
+          "Mixing up the two errors: Type I = \"false alarm\", Type II = \"missed detection\".",
+          "Thinking a lower α is always better (it raises β)."
+        ],
+        "examTip": "Memory hook: **Type I = I**nnocent convicted (H₀ true, rejected).",
+        "links": [
+          {
+            "label": "Power curve in the Lab",
+            "to": "/lab/test"
+          }
+        ]
+      },
+      {
+        "id": "w3-significance",
+        "title": "Statistical vs. practical significance; \"fail to reject\"",
+        "topic": "errors",
+        "outcome": "Distinguish statistical from practical significance and phrase non-rejection correctly.",
+        "why": "With n = 10 000 even a 0.05-point GPA difference is \"significant\". Decision makers care whether the effect matters — and examiners check that you do not \"accept\" H₀.",
+        "definition": "- **Statistical significance**: the effect is unlikely to be due to chance (p < α).\n- **Practical significance**: the effect is large enough to matter in context.\n- **\"Fail to reject H₀\" ≠ \"accept H₀\"**: absence of evidence is not evidence of absence (maybe n was too small).",
+        "example": "Mean GPA 15.08 vs μ₀ = 15 with n = 5 000 could be statistically significant, yet 0.08 points on a 20-point scale is practically irrelevant.",
+        "mistakes": [
+          "Writing \"we accept H₀\" or \"H₀ is true\".",
+          "Equating \"significant\" with \"important\"."
+        ],
+        "examTip": "Phrase: *\"We do not reject H₀; the data do not provide sufficient evidence that μ differs from 15.\"*"
+      },
+      {
+        "id": "w3-ci-link",
+        "title": "Confidence intervals ↔ two-tailed tests",
+        "topic": "testing",
+        "outcome": "Use a CI to decide a two-tailed test and explain why both give the same answer.",
+        "why": "If you already have the CI, you can decide a two-tailed test instantly — a very common exam shortcut.",
+        "definition": "A two-tailed test at level α rejects $H_0: \\mu = \\mu_0$ **exactly when** μ₀ lies **outside** the $(1-\\alpha)$ CI. Both use the same estimate, SE and reliability factor.",
+        "example": "95 % CI for mean GPA: [14.36; 15.64]. Test H₀: μ = 15 at α = 0.05 → 15 is inside → do not reject. Test H₀: μ = 16 → 16 is outside → reject.",
+        "mistakes": [
+          "Using a 95 % CI for a test at α = 0.01 (need the 99 % CI).",
+          "Using a two-sided CI to decide a one-tailed test without adjusting."
+        ],
+        "examTip": "α = 0.05 two-tailed ⇔ 95 % CI; α = 0.10 ⇔ 90 % CI; α = 0.01 ⇔ 99 % CI."
+      },
+      {
+        "id": "w3-prop",
+        "title": "Testing a proportion π",
+        "topic": "test-prop",
+        "outcome": "Test a claim about a population proportion with the z statistic.",
+        "why": "Pass rates, market shares, \"more than half of students…\": proportions are everywhere and follow the same 6-step logic.",
+        "definition": "For $H_0: \\pi = \\pi_0$ and large n ($n\\pi_0 \\ge 5$, $n(1-\\pi_0) \\ge 5$):\n$$z = \\frac{p - \\pi_0}{\\sqrt{\\pi_0(1-\\pi_0)/n}}$$\nNote: the SE uses **π₀** (the value under H₀), unlike the CI, which uses p.",
+        "example": "Claim: at least 90 % pass. Data: 49/60 = 0.8167. $H_0: \\pi \\ge 0.9$ vs $H_1: \\pi < 0.9$. $z = (0.8167 - 0.9)/\\sqrt{0.9 \\cdot 0.1/60} = -2.15$ → p = 1 − 0.9842 = 0.0158 < 0.05 → reject: the pass rate is significantly below 90 %.",
+        "mistakes": [
+          "Using p instead of π₀ in the test SE.",
+          "Using t for proportions."
+        ],
+        "examTip": "CI for π: SE with p. Test for π: SE with π₀."
+      }
+    ]
+  },
+  {
+    "world": 4,
+    "theory": [
+      {
+        "id": "w4-why",
+        "title": "Why ANOVA and not many t-tests?",
+        "topic": "anova",
+        "outcome": "Explain why comparing k means requires ANOVA instead of repeated t-tests.",
+        "why": "Does mean GPA differ between Solo, Group, Hybrid (or Tutoring, Online) study methods? With 4 groups you would need 6 pairwise t-tests — and the chance of at least one false alarm explodes.",
+        "definition": "With m independent tests at α = 0.05, the probability of **at least one Type I error** (family-wise error) is $1 - 0.95^m$. ANOVA tests all means **at once** with a single test at level α.",
+        "formulas": [
+          "\\text{pairs} = \\binom{k}{2} = \\frac{k(k-1)}{2}",
+          "P(\\text{at least one Type I}) = 1-(1-\\alpha)^m"
+        ],
+        "example": "4 study methods → 6 pairs → $1 - 0.95^6 = 0.265$: a 26.5 % chance of declaring a difference that does not exist.",
+        "mistakes": [
+          "Running many t-tests and reporting the \"significant\" one.",
+          "Thinking ANOVA compares variances as the research question — it compares **means**, using variances as a tool."
+        ],
+        "examTip": "Typical question: \"Why not t-tests?\" → inflated Type I error (family-wise error rate)."
+      },
+      {
+        "id": "w4-setup",
+        "title": "Set-up, hypotheses and assumptions",
+        "topic": "anova",
+        "outcome": "Identify the dependent variable and factor; state H₀/H₁ and the assumptions of one-way ANOVA.",
+        "why": "ANOVA is only the right tool for one combination of variable types. Check the types first (World 1!).",
+        "definition": "- **Dependent variable**: metric (quantitative), e.g. FinalGrade, GPA, Stress score.\n- **Factor**: categorical with k ≥ 2 groups, e.g. StudyMethod, StressLevel.\n- $H_0: \\mu_1 = \\mu_2 = \\dots = \\mu_k$ — all population means equal.\n- $H_1$: **at least one** mean differs (not \"all differ\"!).\n- Assumptions: independent random samples, normal populations (or large groups), **equal variances** (homogeneity).",
+        "example": "FinalGrade (metric) by StudyMethod (nominal, k = 4): $H_0: \\mu_{Solo} = \\mu_{Group} = \\mu_{Tutoring} = \\mu_{Online}$.",
+        "mistakes": [
+          "H₁: \"all means are different\" — wrong; one difference is enough.",
+          "Using ANOVA with a categorical dependent variable (that is a χ² problem)."
+        ],
+        "examTip": "ANOVA: metric ~ categorical. χ²: categorical ~ categorical. Regression: metric ~ metric."
+      },
+      {
+        "id": "w4-ss",
+        "title": "Between vs. within variability: SST = SSB + SSW",
+        "topic": "anova",
+        "outcome": "Decompose total variability into between-group and within-group sums of squares.",
+        "why": "The key idea: if group means differ, the spread **between** group means is large compared to the natural spread **within** groups.",
+        "definition": "- **SST** (total): variation of all observations around the grand mean $\\bar{\\bar x}$.\n- **SSB** (between / treatment): variation of the group means around the grand mean, weighted by group size.\n- **SSW** (within / error): variation of observations around their own group mean.",
+        "formulas": [
+          "SST = \\sum_{j}\\sum_{i}(x_{ij}-\\bar{\\bar x})^2",
+          "SSB = \\sum_j n_j(\\bar x_j-\\bar{\\bar x})^2",
+          "SSW = \\sum_j\\sum_i (x_{ij}-\\bar x_j)^2 = \\sum_j (n_j-1)s_j^2",
+          "SST = SSB + SSW"
+        ],
+        "example": "FinalGrade by StudyMethod: the Tutoring group (mean 84.5) is far from the others (60–65) → large SSB, while each group has SD 8–15 → moderate SSW.",
+        "mistakes": [
+          "Forgetting the weights $n_j$ in SSB.",
+          "Computing SSW with n_j instead of (n_j − 1) when using group SDs."
+        ],
+        "examTip": "From summaries (n, mean, s per group): SSW = Σ(nⱼ−1)sⱼ² — very common in exams."
+      },
+      {
+        "id": "w4-f",
+        "title": "Mean squares, the F statistic and the F table",
+        "topic": "anova",
+        "outcome": "Compute MSB, MSW, F and its degrees of freedom; decide with the F table or p-value.",
+        "why": "Sums of squares grow with the number of terms; dividing by df makes them comparable. Their ratio F follows the F-Snedecor distribution under H₀.",
+        "definition": "- $df_B = k - 1$, $df_W = n - k$, $df_T = n - 1$\n- $MSB = SSB/(k-1)$, $MSW = SSW/(n-k)$\n- $F = MSB/MSW$. Under H₀, F ≈ 1. Large F → evidence against H₀.\n- **Always right-tailed**: reject H₀ if $F > F_{1-\\alpha;\\,k-1,\\,n-k}$ (F table: column m = k − 1, block n = n − k, row 1 − α).",
+        "formulas": [
+          "F = \\frac{MSB}{MSW} = \\frac{SSB/(k-1)}{SSW/(n-k)} \\sim F_{k-1,\\;n-k}"
+        ],
+        "example": "3 groups, n = 30 → df (2, 27). Critical value $F_{0.95;2,27} \\approx 3.354$. Course table: block n = 27 is missing → use n = 30 (3.32) or compute with F.INV (3.354).",
+        "mistakes": [
+          "Swapping the df: numerator = k − 1 (columns m), denominator = n − k (blocks n).",
+          "Using a two-tailed rejection region — ANOVA is always right-tailed."
+        ],
+        "examTip": "Write \"$F_{0.95;\\,(2,\\,27)}$\" with both df — the order matters.",
+        "think": [
+          {
+            "q": "Why is F close to 1 when H₀ is true?",
+            "a": "Under H₀ both MSB and MSW estimate the same common variance σ², so their ratio fluctuates around 1. Only real differences between means inflate MSB."
+          }
+        ]
+      },
+      {
+        "id": "w4-table",
+        "title": "Reading and completing the ANOVA table",
+        "topic": "anova",
+        "outcome": "Read software ANOVA tables and fill in missing cells.",
+        "why": "Exams love an ANOVA table with holes. Every cell follows from two or three others.",
+        "definition": "Columns: Source · SS · df · MS · F · p-value.\n- **Between groups**: SSB, k − 1, MSB, F, p\n- **Within groups**: SSW, n − k, MSW\n- **Total**: SST, n − 1\n\nRules: SS and df **add up** down the column; MS = SS/df; F = MSB/MSW. MS do **not** add up.",
+        "example": "Given SSB = 840, SSW = 2 160, k = 3, n = 30: MSB = 420, MSW = 80, F = 5.25, df (2, 27) → 5.25 > 3.354 → reject H₀.",
+        "mistakes": [
+          "Adding MS values to get a \"total MS\".",
+          "Taking F = SSB/SSW instead of MSB/MSW."
+        ],
+        "examTip": "Excel calls them \"Between Groups / Within Groups\"; Jamovi uses the factor name and \"Residuals\"."
+      },
+      {
+        "id": "w4-posthoc",
+        "title": "After rejecting: post-hoc tests and links",
+        "topic": "anova",
+        "outcome": "Explain what post-hoc tests do and how ANOVA links to regression.",
+        "why": "Rejecting H₀ only says \"some mean differs\". Which one? That is the job of post-hoc comparisons.",
+        "definition": "- **Post-hoc tests** (e.g. Tukey, Bonferroni) compare all pairs while controlling the family-wise error rate.\n- Only run them **after** a significant F.\n- **Effect size** η² = SSB/SST: share of total variability explained by the factor.\n- **Link**: the F test of a simple regression has the same logic (MSR/MSE) — \"explained vs. unexplained\" variability.",
+        "formulas": [
+          "\\eta^2 = \\frac{SSB}{SST}"
+        ],
+        "example": "GPA by study method: F significant; Tukey shows Tutoring differs from Solo, Group and Online, while the other three do not differ significantly.",
+        "mistakes": [
+          "Running post-hoc tests when F was not significant.",
+          "Concluding \"Tutoring causes higher grades\" — observational data show association, not causation."
+        ],
+        "examTip": "Conclusion template: \"At α = 0.05, there is sufficient evidence that the mean [Y] differs for at least one [factor] group.\""
+      }
+    ]
+  },
+  {
+    "world": 5,
+    "theory": [
+      {
+        "id": "w5-tables",
+        "title": "Contingency tables: joint, marginal and conditional",
+        "topic": "chisq",
+        "outcome": "Build a contingency table and compute joint, marginal and conditional relative frequencies.",
+        "why": "Is passing the course related to having a part-time job? Both variables are categorical — means make no sense, so we count.",
+        "definition": "- A **contingency table** (cross table) counts observations for every combination of two categorical variables: r rows × c columns.\n- **Marginal totals**: row totals and column totals; grand total n.\n- **Joint** relative frequency: cell / n.\n- **Conditional** relative frequency: cell / row total (row %) or cell / column total (column %).",
+        "formulas": [
+          "f_{ij} = \\frac{O_{ij}}{n}",
+          "f_{j\\mid i} = \\frac{O_{ij}}{n_{i\\cdot}}"
+        ],
+        "example": "Dataset: PartTimeJob × PassFail. No job: 35 Pass, 0 Fail. Job: 14 Pass, 11 Fail. Conditional fail rate: 0 % without a job vs 11/25 = 44 % with a job — a striking difference.",
+        "mistakes": [
+          "Comparing raw counts of groups with different sizes instead of conditional percentages.",
+          "Mixing up row % and column % — say which one you use."
+        ],
+        "examTip": "If the row-% profiles are (almost) identical across rows, the variables look independent.",
+        "think": [
+          {
+            "q": "If PassFail were independent of PartTimeJob, what would the fail rates look like in the two rows?",
+            "a": "Equal (up to sampling noise): both rows would show the overall fail rate 11/60 ≈ 18.3 %."
+          }
+        ]
+      },
+      {
+        "id": "w5-hyp",
+        "title": "The χ² test of independence: hypotheses",
+        "topic": "chisq",
+        "outcome": "State H₀ and H₁ of the test of independence in context.",
+        "why": "Sample tables always show some differences. Are they bigger than random noise would produce?",
+        "definition": "- $H_0$: the two variables are **independent** (no association) in the population.\n- $H_1$: the two variables are **dependent** (associated).\n- Equivalent wording: H₀: the conditional distribution of Y is the same in every category of X.\n- Requires a random sample and counts (not percentages!).",
+        "example": "H₀: StudyMethod and PassFail are independent; H₁: StudyMethod and PassFail are associated.",
+        "mistakes": [
+          "Writing hypotheses about means (μ) — the test is about independence.",
+          "Running the test on percentages instead of absolute counts."
+        ],
+        "examTip": "Always phrase H₀ with \"independent\" and H₁ with \"associated / dependent\" — and name both variables."
+      },
+      {
+        "id": "w5-expected",
+        "title": "Expected counts under independence",
+        "topic": "chisq",
+        "outcome": "Compute expected cell counts under H₀.",
+        "why": "Independence means P(A and B) = P(A)·P(B). Multiply by n and you get the count we would expect in each cell if H₀ were true.",
+        "definition": "For cell (i, j): expected count = row total × column total / grand total. Expected counts keep the same margins as the observed table.",
+        "formulas": [
+          "E_{ij} = \\frac{n_{i\\cdot}\\, n_{\\cdot j}}{n}"
+        ],
+        "example": "PartTimeJob = Yes (25 students) and Fail (11 students), n = 60: $E = 25 \\cdot 11 / 60 = 4.58$. Observed: 11 — far more than expected.",
+        "mistakes": [
+          "Rounding expected counts to integers — keep decimals.",
+          "Using row total × column total without dividing by n."
+        ],
+        "examTip": "Check: every row of expected counts sums to the observed row total."
+      },
+      {
+        "id": "w5-stat",
+        "title": "The χ² statistic, df and the decision rule",
+        "topic": "chisq",
+        "outcome": "Compute χ², its degrees of freedom and decide with the chi-square table or p-value.",
+        "why": "We need one number that measures how far the whole table is from independence.",
+        "definition": "- $\\chi^2 = \\sum \\frac{(O-E)^2}{E}$ over all r·c cells.\n- $df = (r-1)(c-1)$.\n- **Right-tailed**: reject H₀ if $\\chi^2 > \\chi^2_{1-\\alpha;\\,df}$ (chi-square table: row df, column 1 − α, e.g. 0.950).\n- p-value = P(χ²_df > observed χ²) = 1 − CHISQ.DIST(x; df; TRUE) = CHISQ.DIST.RT.",
+        "formulas": [
+          "\\chi^2 = \\sum_{i}\\sum_{j}\\frac{(O_{ij}-E_{ij})^2}{E_{ij}} \\sim \\chi^2_{(r-1)(c-1)}"
+        ],
+        "example": "StressLevel (3) × PassFail (2): df = 2·1 = 2. Critical value at α = 0.05: 5.991. Observed χ² = 48.70 ≫ 5.991 → reject H₀.",
+        "mistakes": [
+          "df = r·c − 1 or n − 1 — wrong; it is (r − 1)(c − 1).",
+          "Reading the 0.050 column instead of 0.950 in the left-tail course table."
+        ],
+        "examTip": "The course table is left-tail: for α = 0.05 use the column **0.950**. $\\chi^2_{0.95;4} = 9.488$.",
+        "think": [
+          {
+            "q": "Why is the χ² test always right-tailed?",
+            "a": "Because every deviation from independence — in any direction — makes (O − E)² larger. Only large values of χ² speak against H₀."
+          }
+        ]
+      },
+      {
+        "id": "w5-conditions",
+        "title": "Conditions: expected counts ≥ 5",
+        "topic": "chisq",
+        "outcome": "Check the validity condition and know what to do when it fails.",
+        "why": "The χ² distribution is only an approximation. With tiny expected counts it can be badly wrong.",
+        "definition": "- Rule of thumb: **all expected counts ≥ 5** (some books: at most 20 % below 5 and none below 1).\n- If violated: **merge categories** (e.g. Low + Medium stress) or collect more data; for 2×2 tables Fisher's exact test is an alternative.\n- Condition concerns **expected**, not observed, counts.",
+        "example": "StudyMethod × PassFail: the Fail column has expected counts 3.12, 2.38, 2.75, 2.75 — all below 5. The χ² result (5.26, df 3) must be interpreted with caution; merging methods into \"Tutoring vs other\" helps.",
+        "mistakes": [
+          "Checking observed counts (an observed 0 is fine if E ≥ 5).",
+          "Ignoring the warning in the conclusion."
+        ],
+        "examTip": "Exam questions often ask: \"Is the test valid?\" → compute the smallest expected count."
+      },
+      {
+        "id": "w5-interpret",
+        "title": "Interpreting the result: contributions and association ≠ causation",
+        "topic": "chisq",
+        "outcome": "Identify the cells driving the result and write a correct conclusion without causal claims.",
+        "why": "Rejecting H₀ tells you that the variables are related, not how. The cell contributions show where the table deviates most.",
+        "definition": "- **Cell contribution** $(O-E)^2/E$: large values show the cells that drive χ².\n- Compare O with E in those cells: more or fewer than expected?\n- Strength (optional): Cramér's $V = \\sqrt{\\chi^2/(n\\,(\\min(r,c)-1))}$, between 0 and 1.\n- A significant association **does not imply causation** (confounders, reverse causality).\n- Method choice: two categorical variables → χ²; metric by groups → ANOVA.",
+        "formulas": [
+          "V = \\sqrt{\\frac{\\chi^2}{n\\,(\\min(r,c)-1)}}"
+        ],
+        "example": "PartTimeJob × PassFail: χ² = 18.86, df 1, p < 0.001. Largest contribution: Job/Fail (O = 11 vs E = 4.58). Working students fail more often — but stress, time and motivation may confound this.",
+        "mistakes": [
+          "\"Part-time jobs cause students to fail.\" — association only.",
+          "Concluding \"strong association\" just because p is tiny (p depends on n)."
+        ],
+        "examTip": "Conclusion template: \"At α = 0.05 there is sufficient evidence that X and Y are associated (not independent).\""
+      }
+    ]
+  },
+  {
+    "world": 6,
+    "theory": [
+      {
+        "id": "w6-corr",
+        "title": "Scatter plots, covariance and correlation r",
+        "topic": "regression",
+        "outcome": "Describe a linear relationship with a scatter plot, the covariance and Pearson's r.",
+        "why": "Do students who study more get better grades? With two metric variables, the first step is always a scatter plot.",
+        "definition": "- **Covariance** $s_{xy}$: sign tells the direction (+ / −), but the size depends on units.\n- **Pearson correlation** $r = s_{xy}/(s_x s_y)$, always between −1 and +1: strength and direction of the **linear** relationship.\n- r ≈ 0 means no **linear** relation (there can still be a curved one).",
+        "formulas": [
+          "s_{xy} = \\frac{\\sum (x_i-\\bar x)(y_i-\\bar y)}{n-1}",
+          "r = \\frac{s_{xy}}{s_x\\, s_y} = \\frac{S_{xy}}{\\sqrt{S_{xx} S_{yy}}}"
+        ],
+        "example": "Dataset: StudyHoursPerWeek and FinalGrade have r = 0.993 — an extremely strong positive linear relationship (the data are cleaned teaching data; real data are rarely this tidy).",
+        "mistakes": [
+          "Reading r = 0.3 as \"30 % explained\" — that is r² = 9 %.",
+          "Concluding causation from a high correlation."
+        ],
+        "examTip": "r has no units and is symmetric: corr(x, y) = corr(y, x). The regression slope is not symmetric."
+      },
+      {
+        "id": "w6-ols",
+        "title": "The least-squares line: b₀ and b₁",
+        "topic": "regression",
+        "outcome": "Compute the OLS intercept and slope from raw data or summary statistics.",
+        "why": "Among all straight lines, we pick the one with the smallest sum of squared vertical errors (residuals).",
+        "definition": "- Model: $Y = \\beta_0 + \\beta_1 X + \\varepsilon$; estimated line $\\hat y = b_0 + b_1 x$.\n- OLS minimises $\\sum e_i^2 = \\sum (y_i - \\hat y_i)^2$.\n- The line always passes through $(\\bar x, \\bar y)$.",
+        "formulas": [
+          "b_1 = \\frac{S_{xy}}{S_{xx}} = \\frac{\\sum (x_i-\\bar x)(y_i-\\bar y)}{\\sum (x_i-\\bar x)^2} = r\\,\\frac{s_y}{s_x}",
+          "b_0 = \\bar y - b_1 \\bar x"
+        ],
+        "example": "Dataset: $\\widehat{FinalGrade} = 25.17 + 4.524 \\cdot StudyHoursPerWeek$.",
+        "mistakes": [
+          "Swapping x and y (regressing x on y gives a different line).",
+          "Computing b₀ before b₁ — b₀ needs b₁."
+        ],
+        "examTip": "From summaries: b₁ = r·s_y/s_x, then b₀ = ȳ − b₁x̄. Keep 4+ decimals in intermediate steps.",
+        "think": [
+          {
+            "q": "Why squared residuals and not just the sum of residuals?",
+            "a": "For the OLS line, positive and negative residuals always cancel: Σeᵢ = 0. Squaring makes every error count and penalises large errors more."
+          }
+        ]
+      },
+      {
+        "id": "w6-interpret",
+        "title": "Interpreting slope, intercept and predictions",
+        "topic": "regression",
+        "outcome": "Interpret b₀ and b₁ in context and make (sensible) predictions.",
+        "why": "An exam question rarely stops at the numbers — \"interpret the slope\" is a classic.",
+        "definition": "- **Slope** b₁: the estimated **average** change in Y for a one-unit increase in X.\n- **Intercept** b₀: the estimated mean of Y when X = 0 — only meaningful if X = 0 lies within the data range.\n- **Prediction**: $\\hat y = b_0 + b_1 x_0$. **Residual**: $e = y - \\hat y$.\n- **Extrapolation** (x₀ far outside the observed range) is unreliable.",
+        "example": "GPA = 10 + 0.8 × hours of study per day. Slope: each additional daily study hour is associated with a GPA that is on average 0.8 points higher. For 6 h: ŷ = 10 + 0.8·6 = **14.8**. A student with 6 h and GPA 16 has residual 16 − 14.8 = +1.2.",
+        "mistakes": [
+          "\"GPA increases by 0.8\" without \"on average / estimated\".",
+          "Interpreting the intercept when x = 0 is far outside the data.",
+          "Predicting for 20 h/day — extrapolation."
+        ],
+        "examTip": "Slope template: \"For each additional [unit of X], [Y] is estimated to change by b₁ [units of Y] on average.\""
+      },
+      {
+        "id": "w6-fit",
+        "title": "Goodness of fit: SST = SSR + SSE and R²",
+        "topic": "regression",
+        "outcome": "Decompose the variability of Y and compute and interpret R² and the standard error of the estimate.",
+        "why": "Same idea as ANOVA: how much of the variability of Y does the line explain?",
+        "definition": "- SST = Σ(y − ȳ)²: total; SSR = Σ(ŷ − ȳ)²: explained by the regression; SSE = Σ(y − ŷ)²: unexplained.\n- **R² = SSR/SST = 1 − SSE/SST**: share of the variability of Y explained by the linear model; in simple regression R² = r².\n- **Standard error of the estimate** $s_e = \\sqrt{SSE/(n-2)}$: typical size of a residual, in units of Y.",
+        "formulas": [
+          "SST = SSR + SSE",
+          "R^2 = \\frac{SSR}{SST} = 1 - \\frac{SSE}{SST}",
+          "s_e = \\sqrt{MSE} = \\sqrt{\\frac{SSE}{n-2}}"
+        ],
+        "example": "R² = 0.60: 60 % of the variability of GPA is explained by daily study hours; 40 % is due to other factors. Then r = +√0.60 = 0.775 (sign from the slope).",
+        "mistakes": [
+          "R² = 0.60 → \"the prediction is 60 % accurate\" — wrong.",
+          "r = √R² without taking the sign of b₁."
+        ],
+        "examTip": "R² sentence: \"[R²·100] % of the variability in [Y] is explained by the linear relationship with [X].\""
+      },
+      {
+        "id": "w6-ttest",
+        "title": "Inference on the slope: t test and confidence interval",
+        "topic": "reg-inference",
+        "outcome": "Test H₀: β₁ = 0 with a t test (df = n − 2) and build a CI for β₁.",
+        "why": "A sample slope of 0.8 could appear by chance even if X and Y are unrelated in the population.",
+        "definition": "- $H_0: \\beta_1 = 0$ (no linear relationship) vs $H_1: \\beta_1 \\ne 0$.\n- $t = \\frac{b_1 - 0}{s_{b_1}}$ with $s_{b_1} = \\frac{s_e}{\\sqrt{S_{xx}}}$, df = **n − 2**.\n- Reject if |t| > $t_{1-\\alpha/2;\\,n-2}$.\n- CI: $b_1 \\pm t_{1-\\alpha/2;\\,n-2}\\, s_{b_1}$. If 0 is outside the CI → reject H₀.",
+        "formulas": [
+          "t = \\frac{b_1}{s_{b_1}} \\sim t_{n-2}",
+          "b_1 \\pm t_{1-\\alpha/2;\\,n-2}; s_{b_1}"
+        ],
+        "example": "Dataset: b₁ = 4.524, s_b₁ = 0.0701, t = 64.50, df 58 (course table: use row 60 → 2.000). |t| ≫ 2.000 → reject H₀. 95 % CI: 4.524 ± 2.000·0.0701 = [4.384; 4.664].",
+        "mistakes": [
+          "Using df = n − 1 (one parameter) — regression estimates two: df = n − 2.",
+          "Testing b₁ = 0 (sample) instead of β₁ = 0 (population)."
+        ],
+        "examTip": "In Excel output the slope row gives Coefficient, Standard Error, t Stat, P-value, Lower 95%, Upper 95% — read them, don't recompute."
+      },
+      {
+        "id": "w6-ftest",
+        "title": "The regression ANOVA table and F = t²",
+        "topic": "reg-inference",
+        "outcome": "Read and complete the regression ANOVA table and link F and t.",
+        "why": "Software prints an ANOVA table for every regression. In simple regression it tests exactly the same thing as the slope t test.",
+        "definition": "- Regression row: SSR, df 1, MSR = SSR/1.\n- Residual row: SSE, df n − 2, MSE = SSE/(n − 2).\n- Total: SST, df n − 1.\n- $F = MSR/MSE \\sim F_{1,\\,n-2}$; in simple regression $F = t^2$ and both p-values are identical.",
+        "formulas": [
+          "F = \\frac{MSR}{MSE} = \\frac{SSR/1}{SSE/(n-2)} = t^2"
+        ],
+        "example": "Dataset: SSR = 13 369.9, SSE = 186.4, n = 60 → MSE = 3.214, F = 4 159.9 = 64.50².",
+        "mistakes": [
+          "Using df (1, n − 1) for F — the denominator is n − 2.",
+          "Thinking F and t can give different decisions in simple regression."
+        ],
+        "examTip": "\"Significance F\" in Excel = p-value of the F test."
+      },
+      {
+        "id": "w6-assump",
+        "title": "Assumptions, residuals and causation",
+        "topic": "reg-inference",
+        "outcome": "Check the regression assumptions with residual plots and avoid causal over-interpretation.",
+        "why": "Inference (t, F, CIs) is only trustworthy when the model assumptions hold.",
+        "definition": "- **LINE**: Linearity, Independence of errors, Normality of errors, Equal variance (homoscedasticity).\n- Residual plot (e vs x or ŷ): should be a structureless band around 0. A curve → non-linearity; a funnel → heteroscedasticity.\n- Outliers and influential points can change the line a lot.\n- **Correlation/regression ≠ causation**: confounders (e.g. motivation drives both study hours and grades).",
+        "example": "Grade vs. study hours: residuals scatter evenly around 0 → assumptions plausible. But motivated students study more **and** perform better — the slope is not a causal effect.",
+        "mistakes": [
+          "Checking normality of X instead of the residuals.",
+          "\"Studying 1 h more causes 4.5 more points.\""
+        ],
+        "examTip": "Exam favourite: name one assumption and how to check it (residual plot / histogram of residuals)."
+      }
+    ]
+  }
+]

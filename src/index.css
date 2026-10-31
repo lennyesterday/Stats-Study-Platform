@@ -1,0 +1,111 @@
+@import "tailwindcss";
+@import "./course/course.css";
+
+@source not "./course/engine.ts";
+
+/* Design tokens from Stats Study Lab: single white theme, Geist, one blue accent. */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface2: #f4f4f5;
+  --panel: #fafafa;
+  --sunk: #f4f4f5;
+  --ink: #0a0a0b;
+  --ink2: #3f3f46;
+  --muted: #71717a;
+  --line: #e9e9ec;
+  --line2: #d4d4d8;
+  --accent: #2a78d6;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(42, 120, 214, 0.09);
+  --median: #eb6834;
+  --good: #15803d;
+  --good-soft: #f0fdf4;
+  --bad: #b91c1c;
+  --bad-soft: #fef2f2;
+  --warn: #a16207;
+  --warn-soft: #fafaf5;
+  --xp: #2a78d6;
+  --fire: #eb6834;
+  --curve: #2a78d6;
+  --shade: rgba(42, 120, 214, 0.2);
+  --f-body: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 10px;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-xp: var(--xp);
+  --color-fire: var(--fire);
+  --color-ink2: var(--ink2);
+  --color-panel: var(--panel);
+  --color-line2: var(--line2);
+  --font-sans: var(--f-body);
+  --font-display: var(--f-body);
+  --font-mono: var(--f-mono);
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.02em; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+.katex { font-size: 1.05em; }
+.katex-display { margin: 0.6em 0; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+.rich p + p, .rich p + ul, .rich ul + p { margin-top: 0.6em; }
+.rich ul { list-style: disc; padding-left: 1.25em; }
+.rich li + li { margin-top: 0.2em; }
+
+/* flashcard flip */
+.flip { perspective: 1400px; }
+.flip-inner { transition: transform 0.5s cubic-bezier(.2,.7,.3,1); transform-style: preserve-3d; position: relative; }
+.flip-inner.flipped { transform: rotateY(180deg); }
+.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-back { transform: rotateY(180deg); position: absolute; inset: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner { transition: none; }
+}
+
+/* print: formula sheet only */
+@media print {
+  @page { size: A4; margin: 10mm; }
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .print-sheet { font-size: 8.4pt; line-height: 1.25; columns: 2; column-gap: 6mm; }
+  .print-sheet .formula-block { break-inside: avoid; margin-bottom: 2.2mm; border: 0 !important; padding: 0 !important; background: none !important; box-shadow: none !important; }
+  .print-sheet .katex { font-size: 1em; }
+  .print-sheet h3 { font-size: 9.5pt; margin: 0 0 1mm; }
+  .print-sheet .katex-display { margin: 0.5mm 0; }
+  .shell { display: block !important; padding: 0 !important; }
+  main { max-width: none !important; padding: 0 !important; }
+}
+.print-only { display: none; }
